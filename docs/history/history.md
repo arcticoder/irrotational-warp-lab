@@ -287,3 +287,45 @@ python -m irrotational_warp sweep-2d --rho 10 \
 3. Optional: Bayesian optimization for efficient exploration
 4. Optional: Pareto front visualization for multi-objective constraints
 <!-- ------ -->
+## Completed Work Summary
+
+Successfully implemented **M5 (partial): 2D Parameter Sweeps with Heatmap Visualization**
+
+### What was built:
+
+1. **2D Parameter Sweep Engine** (sweep.py)
+   - `sweep_2d_z0()`: Sweeps over (σ, v) grid computing energy integrals at each point
+   - Progress reporting for long-running sweeps
+   - Returns structured `SweepPoint2D` results
+
+2. **Heatmap Visualization** (viz.py)
+   - `plot_heatmap_2d()`: 3-panel figure showing:
+     - |E⁻| magnitude across parameter space
+     - E⁺ across parameter space  
+     - Negative fraction |E⁻|/(E⁺+|E⁻|)
+   - Uses diverging/sequential colormaps for clarity
+
+3. **CLI Integration** (cli.py)
+   - New `sweep-2d` command with flags for:
+     - Parameter ranges: `--sigma-min/max`, `--v-min/max`
+     - Grid resolution: `--sigma-steps`, `--v-steps`, `--n`
+     - Outputs: `--out-json`, `--out-plot`
+
+4. **Test Coverage** (test_sweep_2d.py)
+   - Output structure validation
+   - Parameter coverage verification
+   - All 11 tests passing
+
+### Example usage:
+```bash
+python -m irrotational_warp sweep-2d --rho 10 \
+  --sigma-min 2 --sigma-max 8 --sigma-steps 20 \
+  --v-min 0.8 --v-max 2.0 --v-steps 20 --n 101 \
+  --out-json results/sweep_2d.json --out-plot results/heatmap.png
+```
+
+### Remaining M5 work:
+- Optimizer implementation (grid search + Nelder-Mead local refinement)
+- Git SHA provenance tracking in JSON output
+- Optional: Bayesian optimization, Pareto front visualization
+<!-- ------ -->
