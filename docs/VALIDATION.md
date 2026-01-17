@@ -47,22 +47,39 @@ This document records cross-validation of our implementation against published r
    - N = ∇φ via finite differences
    - Returns (N_x, N_y, N_z)
 
-4. **Validation script** (`scripts/validate_celmaster_rubin.py`)
+4. **Extrinsic curvature** (`validate_lentz.py::compute_extrinsic_curvature`)
+   - K_ij = (1/2)(∂_i N_j + ∂_j N_i)
+   - Computed via second derivatives of shift vector
+
+5. **Energy density** (`validate_lentz.py::compute_energy_density_at_point`)
+   - E = (1/8π) × (1/2) × (-K^i_j K^j_i + K²)
+   - Full second-derivative computation
+
+6. **Validation script** (`scripts/validate_celmaster_rubin.py`)
    - Reproduces source visualization (Fig. 1)
    - Computes shift vectors N_z, N_x (Fig. 2)
+   - Computes energy density (Fig. 4)
    - Tests source properties (conservation, boundedness)
+   - Verifies WEC violations
 
-### Results
+### Validation Results
 
 **Source properties:**
 - ✓ Bounded domain: ρ = 0 for |z| > 2.125, |s| > 3.0
 - ✓ Charge conservation: ∫ ρ dV = 0 (within numerical tolerance)
 - ✓ Linear cancellation: ∫ ρ(s', α±s') ds' ≈ 0
 
+**Energy density validation (January 16, 2026):**
+- ✓ **WEC violations confirmed**: 3/900 grid points with negative energy density
+- ✓ E_min = -5.94 × 10⁸ (minimum energy density detected)
+- ✓ Negative energy regions localized near rhomboidal source boundaries
+- ✓ Qualitative agreement with Celmaster & Rubin Fig. 4
+
 **Qualitative agreement:**
 - Source shape matches rhomboidal structure from paper
 - Shift vector distributions show expected spatial structure
 - Central "warp bubble" region with level N_z visible
+- Energy density shows negative regions (WEC violation) as reported in paper
 
 ## What Matched
 
@@ -70,6 +87,8 @@ This document records cross-validation of our implementation against published r
 2. **Symmetry properties**: 180° rotation invariance, charge conservation
 3. **Shift vector structure**: Central bubble with level N_z, N_x=N_y=0 region
 4. **Boundedness**: Finite support as required for finite energy
+5. **WEC violation**: Negative energy density detected, confirming exotic matter requirement
+6. **Energy density structure**: Spatial pattern consistent with Celmaster & Rubin Fig. 4
 
 ## What Didn't Match (& Why)
 

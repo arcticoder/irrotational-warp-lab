@@ -24,6 +24,7 @@ from irrotational_warp.validate_lentz import (
     phi_L_lentz,
     phi_rh_corrected,
     compute_shift_vector,
+    compute_energy_density_at_point,
 )
 
 
@@ -150,6 +151,81 @@ def test_source_properties():
     print(f"   ∫ ρ(s', α-s') ds' = {integral_minus:.6f} (should be ~0)")
 
 
+def plot_energy_density():
+    """Reproduce Celmaster & Rubin Fig. 4: energy density for corrected potential."""
+    source = RhomboidalSource()
+    
+    print("Computing energy density on coarse grid (this will take several minutes)...")
+    print("Note: Energy computation requires 2nd derivatives, so it's computationally expensive")
+    
+    # Use a coarse grid for demonstration (Fig. 4 uses finer resolution)
+    # Grid in (s, z) plane at y=0
+    s_vals = np.linspace(-2, 4, 30)  # Coarse grid
+    z_vals = np.linspace(-2, 3, 30)
+    
+    E_grid = np.zeros((len(z_vals), len(s_vals)))
+    
+    total_points = len(z_vals) * len(s_vals)
+    count = 0
+    
+    for i, z in enumerate(z_vals):
+        for j, s in enumerate(s_vals):
+            # Convert (s, z) to (x, y, z) with y=0
+            # s = x + |y| = x (at y=0)
+            x = s
+            y = 0.0
+            
+            # Compute energy density at this point
+            E_grid[i, j] = compute_energy_density_at_point(
+                phi_rh_corrected, x, y, z, source, h=1e-4
+            )
+            
+            count += 1
+            if count % 100 == 0:
+                print(f"  {count}/{total_points} points computed...")
+    
+    print(f"  {total_points}/{total_points} points computed ✓")
+    
+    # Plot energy density
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Use symmetric colormap centered at zero to show negative energy regions
+    vmax = np.abs(E_grid).max()
+    im = ax.contourf(s_vals, z_vals, E_grid, levels=20, 
+                     cmap='RdBu_r', vmin=-vmax, vmax=vmax)
+    
+    ax.set_xlabel('s = x + |y| (at y=0)')
+    ax.set_ylabel('z')
+    ax.set_title('Energy Density E (Celmaster & Rubin corrected potential φ_rh)')
+    
+    cbar = plt.colorbar(im, ax=ax)
+    cbar.set_label('E (energy density)')
+    
+    ax.grid(True, alpha=0.3)
+    ax.axhline(0, color='k', linewidth=0.5, alpha=0.5)
+    ax.axvline(0, color='k', linewidth=0.5, alpha=0.5)
+    
+    # Save
+    output_dir = Path("validation_output")
+    output_dir.mkdir(exist_ok=True)
+    output_file = output_dir / "energy_density.png"
+    plt.savefig(output_file, dpi=150, bbox_inches='tight')
+    plt.close()
+    
+    print(f"✓ Saved energy density to {output_file}")
+    
+    # Report WEC violation
+    negative_mask = E_grid < 0
+    if np.any(negative_mask):
+        num_negative = np.sum(negative_mask)
+        total = E_grid.size
+        print(f"\n✓ WEC violation detected:")
+        print(f"  {num_negative}/{total} points have negative energy density")
+        print(f"  E_min = {E_grid.min():.6e}")
+    else:
+        print(f"\n✗ No WEC violation detected (E_min = {E_grid.min():.6e})")
+
+
 def main():
     """Run all validation checks."""
     print("=" * 60)
@@ -169,6 +245,10 @@ def main():
     # Plot shift vectors
     print("\n2. Computing and plotting shift vectors...")
     plot_shift_vectors()
+    
+    # Plot energy density
+    print("\n3. Computing and plotting energy density...")
+    plot_energy_density()
     
     print("\n" + "=" * 60)
     print("✓ Validation complete!")

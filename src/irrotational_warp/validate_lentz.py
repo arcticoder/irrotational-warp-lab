@@ -213,3 +213,75 @@ def compute_eulerian_energy(K: np.ndarray) -> float:
     E = (1.0 / (8.0 * np.pi)) * 0.5 * (-K_squared_trace + K_trace**2)
     
     return E
+
+
+def compute_energy_density_at_point(phi_func, x: float, y: float, z: float,
+                                    source: RhomboidalSource, h: float = 1e-5) -> float:
+    """
+    Compute energy density at a point by computing shift vector derivatives
+    and extrinsic curvature.
+    
+    Args:
+        phi_func: Potential function (phi_L_lentz or phi_rh_corrected)
+        x, y, z: Point coordinates
+        source: Rhomboidal source configuration
+        h: Finite difference step size
+        
+    Returns:
+        E: Energy density at (x, y, z)
+    """
+    # Compute shift vector components
+    N_x, N_y, N_z = compute_shift_vector(phi_func, x, y, z, source, h)
+    
+    # Compute derivatives of shift vector components via finite differences
+    # dN_x/dx, dN_x/dy, dN_x/dz
+    N_xp, _, _ = compute_shift_vector(phi_func, x + h, y, z, source, h)
+    N_xm, _, _ = compute_shift_vector(phi_func, x - h, y, z, source, h)
+    dN_x_dx = (N_xp - N_xm) / (2 * h)
+    
+    N_xp, _, _ = compute_shift_vector(phi_func, x, y + h, z, source, h)
+    N_xm, _, _ = compute_shift_vector(phi_func, x, y - h, z, source, h)
+    dN_x_dy = (N_xp - N_xm) / (2 * h)
+    
+    N_xp, _, _ = compute_shift_vector(phi_func, x, y, z + h, source, h)
+    N_xm, _, _ = compute_shift_vector(phi_func, x, y, z - h, source, h)
+    dN_x_dz = (N_xp - N_xm) / (2 * h)
+    
+    # dN_y/dx, dN_y/dy, dN_y/dz
+    _, N_yp, _ = compute_shift_vector(phi_func, x + h, y, z, source, h)
+    _, N_ym, _ = compute_shift_vector(phi_func, x - h, y, z, source, h)
+    dN_y_dx = (N_yp - N_ym) / (2 * h)
+    
+    _, N_yp, _ = compute_shift_vector(phi_func, x, y + h, z, source, h)
+    _, N_ym, _ = compute_shift_vector(phi_func, x, y - h, z, source, h)
+    dN_y_dy = (N_yp - N_ym) / (2 * h)
+    
+    _, N_yp, _ = compute_shift_vector(phi_func, x, y, z + h, source, h)
+    _, N_ym, _ = compute_shift_vector(phi_func, x, y, z - h, source, h)
+    dN_y_dz = (N_yp - N_ym) / (2 * h)
+    
+    # dN_z/dx, dN_z/dy, dN_z/dz
+    _, _, N_zp = compute_shift_vector(phi_func, x + h, y, z, source, h)
+    _, _, N_zm = compute_shift_vector(phi_func, x - h, y, z, source, h)
+    dN_z_dx = (N_zp - N_zm) / (2 * h)
+    
+    _, _, N_zp = compute_shift_vector(phi_func, x, y + h, z, source, h)
+    _, _, N_zm = compute_shift_vector(phi_func, x, y - h, z, source, h)
+    dN_z_dy = (N_zp - N_zm) / (2 * h)
+    
+    _, _, N_zp = compute_shift_vector(phi_func, x, y, z + h, source, h)
+    _, _, N_zm = compute_shift_vector(phi_func, x, y, z - h, source, h)
+    dN_z_dz = (N_zp - N_zm) / (2 * h)
+    
+    # Compute extrinsic curvature
+    K = compute_extrinsic_curvature(
+        N_x, N_y, N_z,
+        dN_x_dx, dN_x_dy, dN_x_dz,
+        dN_y_dx, dN_y_dy, dN_y_dz,
+        dN_z_dx, dN_z_dy, dN_z_dz
+    )
+    
+    # Compute energy density
+    E = compute_eulerian_energy(K)
+    
+    return E
