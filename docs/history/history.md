@@ -572,3 +572,7 @@ M6 validation is complete and committed. Let me check the test suite to ensure e
 
 Test run was cancelled.
 <!-- ------ -->
+I’ve confirmed the `optimize` CLI is currently targeting the Rodal-like `compute_slice_z0()` objective (minimizing `|E⁻|` over `(sigma, v)`), and I added a small “quick win” improvement: the `sweep` command can now optionally emit a plot (so we can immediately see `neg_fraction` vs `sigma` without extra glue).
+
+Next I’m going to run a real baseline experiment (1D sweep plot + 2D heatmap + hybrid optimize) and save everything under a single `results/experiments/...` folder for easy comparison.
+<!-- ------ -->
