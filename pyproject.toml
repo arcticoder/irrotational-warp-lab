@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "irrotational-warp"
+version = "0.1.0"
+description = "Irrotational (curl-free) shift-vector warp metrics: diagnostics and optimization"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Sherri + collaborators"}]
+dependencies = [
+  "numpy>=1.24",
+  "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.4",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
