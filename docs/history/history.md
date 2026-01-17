@@ -568,3 +568,7 @@ M6 is now complete. Possible next steps:
 3. Begin M8 paper assembly pipeline
 4. Revisit M1 extension (3D volume integration) for improved accuracy
 <!-- ------ -->
+M6 validation is complete and committed. Let me check the test suite to ensure everything still passes: 
+
+Test run was cancelled.
+<!-- ------ -->
