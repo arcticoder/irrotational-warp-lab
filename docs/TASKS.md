@@ -50,12 +50,12 @@ with smoothed wall function $f(\xi)$ (e.g., tanh wall).
 ## Key inputs in the broader workspace
 These are *not* copied into this repo; we reference them for reading/validation:
 
-- Rodal (2025) LaTeX: `energy/papers/related/sn-article.tex`
-- White (2025): `energy/papers/related/White_2025_Class._Quantum_Grav._42_235022.pdf`
-- McMonigal et al. (2025) draft: `energy/papers/related/Comment_on_hyper-fast_solitons_draft_4.tex`
-- Lentz (2021): `energy/papers/related/Lentz_2021.tex`
-- Visser/Santiago/Schuster: `energy/papers/related/WarpPRD-2022-02-26.tex`
-- Fuchs et al. (2024): `energy/papers/related/Fuchs_2024.tex`
+- Rodal (2025) LaTeX: `papers/related/sn-article.tex`
+- White (2025): `papers/related/White_2025_Class._Quantum_Grav._42_235022.pdf`
+- McMonigal et al. (2025) draft: `papers/related/Comment_on_hyper-fast_solitons_draft_4.tex`
+- Lentz (2021): `papers/related/Lentz_2021.tex`
+- Visser/Santiago/Schuster: `papers/related/WarpPRD-2022-02-26.tex`
+- Fuchs et al. (2024): `papers/related/Fuchs_2024.tex`
 
 ## Milestones and tasks
 
@@ -458,3 +458,130 @@ A less-capable model should be able to:
 - run the CLI to generate a plot and a JSON summary
 - extend the potential family by adding one function
 - run tests and understand failures from the docs
+---
+
+# Post-M6 Roadmap: Validation, Scalability, and Paper-Quality Visuals
+
+This section tracks the project's post-M6 roadmap with an emphasis on **validation**, **scalability**, and **paper-quality visuals**.
+
+Status legend:
+- `[ ]` not started
+- `[-]` in progress
+- `[x]` complete
+
+---
+
+## 1) Extend to Full 3D Volume Integration
+
+- [x] Add a true 3D volume integral path for global energies (not just 2D / axisymmetric diagnostics).
+- [x] Implement backend-agnostic potential evaluation (NumPy/CuPy compatible)
+- [x] Add GPU acceleration support via CuPy backend
+- [x] Systematic convergence study with multiple grid resolutions
+- [ ] Profile and optimize 3D Hessian computation
+- [x] Implement tail corrections using 2-point $1/R$ estimator
+
+Suggested command shapes:
+```bash
+# CPU (NumPy)
+python scripts/reproduce_rodal_exact.py --mode 3d --n 100 --rho 5 --sigma 4 --v 1 \
+  --out results/experiments/exact_rodal_3d.json
+
+# GPU (CuPy) - faster for large grids
+python scripts/reproduce_rodal_exact.py --mode 3d --backend cupy --dtype float32 --n 120 \
+  --rho 5 --sigma 4 --v 1 --out results/experiments/exact_rodal_3d_cupy.json
+
+# Check GPU availability
+python scripts/check_gpu.py
+
+# Convergence study
+python scripts/convergence_study_3d.py --backend numpy --n-values 40,60,80,100 \
+  --out results/experiments/convergence/study_3d.json
+```
+
+Acceptance:
+- ✅ Reproduces Rodal's qualitative finite-window ratios (~1.07 at R2)
+- ✅ Shows stable convergence under refinement (tail ~0.04% with n=80)
+- ✅ GPU backend available and tested
+
+**Convergence Results (n=40→60→80):**
+- Tail imbalance: 0.134% → 0.055% → 0.034% (approaching Rodal's ~0.04%)
+- Ratio at R2: 1.113 → 1.092 → 1.085 (approaching Rodal's ~1.07)
+- Successive differences decrease monotonically (good convergence)
+
+---
+
+## 2) Superluminal Parameter Studies (v > 1)
+
+- [x] Sweep v beyond 1 (e.g., 1–3) while monitoring numerical stability.
+- [x] Produce v-slices of $(E_+, E_-, E_{net})$ and tail-corrected totals.
+- [x] Verify energy scaling (E ∝ v²) in superluminal regime.
+- [ ] Add diagnostics to flag "pathology candidates" (e.g., horizons / coordinate issues) and track invariants where available.
+
+Scripts:
+```bash
+# Run velocity sweep
+python scripts/sweep_superluminal.py --mode axisym --nx 1200 --ny 600 \
+  --v-min 1.0 --v-max 3.0 --v-steps 20 --rho 5 --sigma 4 \
+  --out results/experiments/superluminal/sweep_v.json
+
+# GPU-accelerated 3D sweep
+python scripts/sweep_superluminal.py --mode 3d --backend cupy --dtype float32 --n 100 \
+  --v-min 1.0 --v-max 2.5 --v-steps 15 --rho 5 --sigma 4 \
+  --out results/experiments/superluminal/sweep_v_3d_cupy.json
+
+# Visualize results
+python scripts/plot_superluminal.py results/experiments/superluminal/sweep_v.json \
+  --out results/experiments/superluminal/sweep_v_plot.png
+```
+
+Findings:
+- ✅ Energies scale as v² (verified numerically)
+- ✅ Tail imbalance percentage remains stable across superluminal regime
+- ✅ No obvious numerical instabilities detected for v ≤ 3
+
+Note: this repo is geometric/diagnostic; causality claims require careful geodesic/horizon analysis.
+
+---
+
+## 3) Simple Sourcing Models (Plasma / EM / Toy Matter)
+
+- [ ] Add a `src/irrotational_warp/sourcing.py` module with simple, parameterized positive-energy source models.
+- [ ] Compare geometric "required stress-energy" against toy sources for plausibility studies.
+- [ ] Keep this explicitly labeled as *toy* unless a full Einstein-matter solve is implemented.
+
+---
+
+## 4) Optimization Enhancements
+
+- [ ] Extend hybrid (grid + Nelder–Mead) with Bayesian optimization (e.g., scikit-optimize) for multi-parameter tuning.
+- [ ] Target extremely small imbalance regimes, with reproducibility checks (seeded runs, grid convergence).
+- [ ] CLI additions (example): `optimize --method bayes --bounds sigma:1-12 v:0.8-2.5`.
+
+---
+
+## 5) Validation Against More Papers
+
+- [ ] Add cross-checks against:
+  - `papers/related/Fuchs_2024.tex`
+  - `papers/related/WarpPRD-2022-02-26.tex`
+- [ ] Add tests (or validation scripts) that assert expected sign/structure for known reference cases.
+
+Important: avoid over-assertive tests (physics is sensitive to conventions); prefer regression+invariant checks.
+
+---
+
+## 6) Documentation + Paper Assembly
+
+- [ ] Update README with a "Quick Start" reproduction section.
+- [x] Ensure all results include provenance: git SHA, params, grid settings, runtime.
+- [x] Add a minimal notebook under `notebooks/` for interactive demos (scripts remain source of truth).
+- [ ] Add a LaTeX skeleton under `docs/paper/` once figures/registries are stable.
+
+---
+
+## 7) Performance + Usability (Quick Wins)
+
+- [ ] Profile high-res runs (`cProfile`) and focus on Hessian/derivative computation.
+- [ ] Add `--verbose` + progress reporting for long runs (tqdm).
+- [x] GPU acceleration under WSL2 (RTX 2060 Super): CuPy backend implemented and tested.
+- [x] GPU check script added: `scripts/check_gpu.py`

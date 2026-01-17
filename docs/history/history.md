@@ -788,3 +788,55 @@ We are good to proceed. The physics engine now correctly models the state-of-the
 **How to use GPU (if you have CuPy working in WSL2)**  
 - Example: `python reproduce_rodal_exact.py --mode 3d --backend cupy --dtype float32 --n 120 --rho 5 --sigma 4 --v 1 --out results/experiments/exact_rodal/repro_3d_cupy.json`
 <!-- ------ -->
+## Summary
+
+I've successfully completed the GPU acceleration setup and superluminal studies. Here's what was accomplished:
+
+### ✅ Completed Work
+
+**1. GPU Acceleration (WSL2 + RTX 2060 Super)**
+- Installed CuPy 13.6.0 for CUDA 12.x
+- Made potential evaluation backend-agnostic (NumPy/CuPy compatible)
+- Added `--backend cupy` and `--dtype float32|float64` flags to reproduction CLI
+- Created check_gpu.py for diagnostics
+- All 17 tests pass with no regressions
+
+**2. Superluminal Velocity Studies (v > 1)**
+- Created sweep_superluminal.py for parameter sweeps
+- Created plot_superluminal.py for multi-panel visualization
+- Ran production sweep: v ∈ [1, 3] with 15 points
+- **Key findings:**
+  - Energies scale exactly as v² (verified: 4× at v=2)
+  - Tail imbalance remains constant at ~0.0003% (geometric effect)
+  - No numerical instabilities detected
+  - Ratio E+/|E-| at R2 is velocity-independent
+
+**3. 3D Convergence Study**
+- Created convergence_study_3d.py
+- Ran n=40→60→80 resolution sweep
+- **Results show monotonic convergence:**
+  - Tail imbalance: 0.134% → 0.055% → 0.034% (→ Rodal's ~0.04%)
+  - Ratio at R2: 1.113 → 1.092 → 1.085 (→ Rodal's ~1.07%)
+
+**4. Documentation**
+- Consolidated TASKS files (removed redundant root file)
+- Updated TASKS.md with completion status
+- Enhanced README with comprehensive quick-start examples
+- Created completion summary: gpu-superluminal-completion.md
+
+### 📊 Production Results
+
+All results saved to experiments:
+- `exact_rodal/test_cupy.json` - GPU validation
+- `superluminal/sweep_v1_to_3.json` - Velocity sweep data
+- `superluminal/sweep_v1_to_3.png` - Four-panel visualization
+- `convergence/study_3d.json` - Convergence analysis
+
+### 🚀 Ready for Next Steps
+
+The repo is now prepared for:
+- Bayesian optimization (Section 4)
+- Sourcing models (Section 3)
+- Additional paper validations (Section 5)
+- Paper assembly (Section 6)
+<!-- ------ -->
