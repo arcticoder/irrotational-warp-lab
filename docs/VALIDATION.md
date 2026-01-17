@@ -140,7 +140,7 @@ This document records cross-validation of our implementation against published r
 
 ## References & Git Provenance
 
-- **Paper**: `/home/echo_/Code/asciimath/energy/papers/related/Comment_on_hyper-fast_solitons_draft_4.tex`
+- **Paper**: `/home/echo_/Code/asciimath/irrotational-warp-lab/papers/related/Comment_on_hyper-fast_solitons_draft_4.tex`
 - **Implementation**: Commit SHA will be added upon M6 completion
 - **Validation run**: `scripts/validate_celmaster_rubin.py`
 - **Output**: `validation_output/source_rhomboidal.png`, `shift_vectors.png`

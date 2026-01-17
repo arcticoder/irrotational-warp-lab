@@ -558,7 +558,7 @@ python -m irrotational_warp optimize --sigma-steps 10 --v-steps 10 --n 71 --refi
 
 **Reference:**
 - Celmaster & Rubin (2024) "Violations of the Weak Energy Condition for Lentz Warp Drives"
-- Paper location: `/home/echo_/Code/asciimath/energy/papers/related/Comment_on_hyper-fast_solitons_draft_4.tex`
+- Paper location: `/home/echo_/Code/asciimath/irrotational-warp-lab/papers/related/Comment_on_hyper-fast_solitons_draft_4.tex`
 
 **Next logical step: Commit M6 completion and consider M7/M8**
 
@@ -775,4 +775,16 @@ This confirms that our work is on the right track. I have successfully reproduce
 *   **Results:** exact_rodal (Contains the log and a fresh README summarizing the validation).
 
 We are good to proceed. The physics engine now correctly models the state-of-the-art irrotational warp drive.
+<!-- ------ -->
+**What I changed (and verified)**  
+- Made the exact Rodal potential backend-agnostic by adding an optional `xp=` array-module parameter (works with NumPy by default; compatible with CuPy/JAX-style APIs): potential.py  
+- Added optional GPU-capable execution to the Rodal reproduction CLI via `--backend numpy|cupy` plus `--dtype float64|float32`, and threaded the backend through to the potential: reproduce_rodal_exact.py  
+- Fixed the outdated CLI example flag in your roadmap (`--grid` → `--n`) and noted the new CuPy option: TASKS.md  
+
+**Validation**  
+- Ran the full repo tests: `python -m pytest -q` → `17 passed`  
+- Smoke-ran the updated CLI in axisym mode and confirmed no more divide-by-zero warnings on-axis.
+
+**How to use GPU (if you have CuPy working in WSL2)**  
+- Example: `python reproduce_rodal_exact.py --mode 3d --backend cupy --dtype float32 --n 120 --rho 5 --sigma 4 --v 1 --out results/experiments/exact_rodal/repro_3d_cupy.json`
 <!-- ------ -->
