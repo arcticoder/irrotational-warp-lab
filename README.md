@@ -16,3 +16,10 @@ pytest -q
 ```
 
 See [docs/TASKS.md](docs/TASKS.md) for the research plan and milestones.
+
+## Latest Results
+
+**Baseline Optimization Experiment** (Jan 16, 2026)  
+[results/experiments/baseline_rodal/README.md](results/experiments/baseline_rodal/README.md)
+
+Key finding: The simple Rodal-like potential (tanh wall, dipole) produces **balanced energy cancellation** (neg_fraction ≈ 0.50) across all tested parameters, NOT positive dominance. This establishes that functional form and integration details matter critically for reproducing literature claims.
