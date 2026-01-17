@@ -555,3 +555,5 @@ This will involve:
 3. Reproduce Celmaster & Rubin Fig. 4
 4. Compare to our ADM diagnostics
 <!-- ------ -->
+Session 7 history entry added. M6 validation is now in progress with source/potentials/shift vectors implemented and validated. The next step is to implement energy density calculations to complete the validation against Celmaster & Rubin (2024).
+<!-- ------ -->
