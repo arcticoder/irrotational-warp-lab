@@ -422,3 +422,61 @@ python -m irrotational_warp sweep-2d --rho 10 \
 - Git SHA provenance tracking in JSON output
 - Optional: Bayesian optimization, Pareto front visualization
 <!-- ------ -->
+## ✅ Completed: M5 (Advanced Optimization + Multi-Parameter Sweeps)
+
+Successfully implemented a complete optimization framework:
+
+### What was built:
+
+1. **Optimization Engine** (optimize.py)
+   - `grid_search()`: Exhaustive parameter space exploration
+   - `optimize_nelder_mead()`: Local gradient-free optimization
+   - `optimize_hybrid()`: Grid + Nelder-Mead refinement (recommended)
+   - Objective: Minimize |E⁻| (negative energy magnitude)
+
+2. **Git Provenance** (io.py)
+   - `get_git_info()`: Captures SHA, branch, dirty status
+   - Automatically included in all JSON outputs
+
+3. **CLI Integration** (cli.py)
+   - `optimize` command with configurable ranges and refinement
+   - Git provenance added to `sweep`, `sweep-2d`, and `optimize` outputs
+
+4. **Test Coverage** (test_optimize.py)
+   - 6 tests covering all optimization modes
+   - Determinism verification
+   - All 17 tests passing
+
+### Example usage:
+```bash
+# Grid search only (deterministic, fast)
+python -m irrotational_warp optimize --sigma-steps 10 --v-steps 10 --n 71
+
+# Hybrid (recommended): grid + Nelder-Mead refinement
+python -m irrotational_warp optimize --sigma-steps 10 --v-steps 10 --n 71 --refine
+```
+
+---
+
+## 📊 Current Progress
+
+**Completed Milestones:**
+- ✅ M0: Project scaffold + CLI
+- ✅ M1: Fast ADM diagnostics (2D z=0 slice)
+- ✅ M2: Einstein tensor eigenvalues
+- ✅ M3: Sigma parameter sweeps
+- ✅ M4: Tail correction
+- ✅ M5: Multi-parameter optimization
+
+**Remaining Milestones:**
+- ⏸️ M6: Paper-grade validation against literature
+- ⏸️ M7: Extensions (optional)
+- ⏸️ M8: Paper assembly pipeline
+
+**Next logical step: M6 (Validation against Rodal/McMonigal papers)**
+
+This would involve:
+1. Extract exact potential definitions from Rodal/McMonigal papers
+2. Replicate key figures/trends
+3. Document what matched/didn't in `docs/VALIDATION.md`
+<!-- ------ -->
