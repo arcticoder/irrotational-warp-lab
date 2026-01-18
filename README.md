@@ -1,5 +1,9 @@
 # Irrotational Warp Lab
 
+[![CI](https://github.com/DawsonInstitute/irrotational-warp-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/DawsonInstitute/irrotational-warp-lab/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Release](https://img.shields.io/github/v/release/DawsonInstitute/irrotational-warp-lab)](https://github.com/DawsonInstitute/irrotational-warp-lab/releases)
+
 Research code for exploring irrotational (curl-free) shift-vector warp metrics and energy-condition diagnostics.
 
 ## Quickstart
@@ -76,6 +80,8 @@ python scripts/test_bayesian_optimization.py
 ```bash
 pytest -q
 ```
+
+**Contributing**: See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 See [docs/TASKS.md](docs/TASKS.md) for the complete research plan and milestones.
 
@@ -154,5 +160,19 @@ See [docs/session-progress-2026-01-17-continued.md](docs/session-progress-2026-0
 Draft manuscript: [papers/irrotational_warp_metric.tex](papers/irrotational_warp_metric.tex)
 
 To compile: `make paper` → Output: `papers/irrotational_warp_metric.pdf`
+
+## Citation
+
+If you use this code or results in your research, please cite:
+
+```bibtex
+@software{irrotational_warp_lab_2026,
+  author = {Sherri and collaborators},
+  title = {Irrotational Warp Lab: Validation and Optimization Framework for Curl-Free Shift-Vector Warp Metrics},
+  year = {2026},
+  url = {https://github.com/DawsonInstitute/irrotational-warp-lab},
+  version = {0.1.0}
+}
+```
 
 

@@ -1020,3 +1020,38 @@ The codebase and manuscript are now fully aligned with your specifications and r
 - `make lint` now passes.
 
 <!-- ------ -->
+The repository is now fully configured and spotlight-ready. Here's what was accomplished:
+
+## ✅ Repository Setup Complete
+
+**1. GitHub Organization Transfer**
+- Set upstream to `https://github.com/DawsonInstitute/irrotational-warp-lab.git`
+- Created and pushed v0.1.0 release tag with comprehensive notes
+- Published GitHub release: https://github.com/DawsonInstitute/irrotational-warp-lab/releases/tag/v0.1.0
+
+**2. Repository Metadata**
+- Added topics: warp-drive, general-relativity, gpu-acceleration, bayesian-optimization, computational-physics, python
+- Set description: "Validation and optimization framework for irrotational shift-vector warp metrics with GPU acceleration and Bayesian optimization"
+- Set homepage: https://dawsoninstitute.org
+
+**3. Documentation Updates**
+- Added to DawsonInstitute profile README with full feature highlights
+- Added to dawsoninstitute.org outputs section
+- Enhanced README with CI/license/release badges
+- Added citation section with BibTeX
+- Added "Contributing" quick link
+
+**4. Infrastructure Enhancements**
+- Exported pinned dependencies: requirements-dev.txt
+- Enhanced bibliography with Santiago et al. (2022) reference
+- Created GitHub issues for future work ([#1](https://github.com/DawsonInstitute/irrotational-warp-lab/issues/1), [#2](https://github.com/DawsonInstitute/irrotational-warp-lab/issues/2))
+- Updated .gitignore for coverage artifacts
+
+**5. Validation Status**
+- ✅ 39/39 tests passing
+- ✅ Ruff lint clean
+- ✅ Paper figures exist (convergence, superluminal, optimization)
+- ✅ All open-source scaffolding in place
+
+The repository is now professionally polished and ready for public spotlight. The only remaining optional items are LaTeX paper compilation and fresh-environment validation, which can be done as needed.
+<!-- ------ -->
