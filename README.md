@@ -167,7 +167,7 @@ If you use this code or results in your research, please cite:
 
 ```bibtex
 @software{irrotational_warp_lab_2026,
-  author = {Sherri and collaborators},
+  author = {Ryan Sherrington},
   title = {Irrotational Warp Lab: Validation and Optimization Framework for Curl-Free Shift-Vector Warp Metrics},
   year = {2026},
   url = {https://github.com/DawsonInstitute/irrotational-warp-lab},
