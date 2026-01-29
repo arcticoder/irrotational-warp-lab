@@ -24,4 +24,6 @@ papers/**/*.bbl
 papers/**/*.blg
 papers/**/*.png
 papers/**/*Zone.Identifier
-papers/**/author_config.tex
+papers/**/
+author_config.tex
+papers/related/**
